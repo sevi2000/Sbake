@@ -9,20 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.Input;
+import java.util.*;
 public class SbakeGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Stage stg;
 	Texture img;
 	Field field;
 	BodyPart head;
-	
+	Donut donut;
+	Random random = new Random();
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		stg = new Stage(new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),new OrthographicCamera()),batch);
 		
 		field = new Field();
-		Donut donut = new Donut(batch);
+		donut = new Donut(batch);
 		head = new BodyPart(batch);
 		BodyPart bp = new BodyPart(batch);
 		//stg.addActor(donut);
@@ -44,6 +46,11 @@ public class SbakeGame extends ApplicationAdapter {
 			head.setDirection(Direction.DOWN);
 		} else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			head.setDirection(Direction.RIGHT);
+		}
+		if (field.field.get(head).x == field.field.get(donut).x && field.field.get(head).y == field.field.get(donut).y){
+			field.addBodyPart(stg,batch);
+			field.field.get(donut).x = random.nextInt(10);
+			field.field.get(donut).y = random.nextInt(10);
 		}
 		field.updateField();
 		stg.act();

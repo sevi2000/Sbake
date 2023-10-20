@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-
+import com.badlogic.gdx.graphics.g2d.Batch;
 public class Field {
     static Random random = new Random();
     int width;
     int height;
     Map<FieldElement, Vector2> field;
+    BodyPart lastAddedPart;
     Field() {
         field = new HashMap<>();
         this.width = 10;
@@ -24,8 +24,16 @@ public class Field {
     }
     public void initSnake(BodyPart bodyPart, Stage stg) {
         field.put(bodyPart,new Vector2(3,3));
-        System.out.println("nb fe : " + field.size());
         stg.addActor(bodyPart);
+        lastAddedPart =  bodyPart;
+        updateField();
+    }
+    public void addBodyPart(Stage stg, Batch batch) {
+        BodyPart newBodyPart =  new BodyPart(batch);
+        newBodyPart.direction = lastAddedPart.direction;
+        field.put(newBodyPart,new Vector2(field.get(lastAddedPart).x-1,field.get(lastAddedPart).y));
+        stg.addActor(newBodyPart);
+        lastAddedPart = newBodyPart;
         updateField();
     }
     public void updateField(){
@@ -47,7 +55,7 @@ public class Field {
                         break;
                 }
                         try {
-                            Thread.sleep(100);
+                            Thread.sleep(300);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
