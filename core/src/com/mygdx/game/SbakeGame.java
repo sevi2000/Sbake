@@ -27,9 +27,6 @@ public class SbakeGame extends ApplicationAdapter {
 		donut = new Donut(batch);
 		head = new BodyPart(batch);
 		BodyPart bp = new BodyPart(batch);
-		//stg.addActor(donut);
-		//stg.addActor(head);
-		//stg.addActor(bp);
 		field.addDonutAtRandomLocation(donut,stg);
 		field.initSnake(head,stg);
 		//field.initSnake(bp,stg);
@@ -48,6 +45,7 @@ public class SbakeGame extends ApplicationAdapter {
 			head.setDirection(Direction.RIGHT);
 		}
 		if (field.field.get(head).x == field.field.get(donut).x && field.field.get(head).y == field.field.get(donut).y){
+			System.out.println("TOUCHED DONUTTT!!!!!");
 			field.addBodyPart(stg,batch);
 			field.field.get(donut).x = random.nextInt(10);
 			field.field.get(donut).y = random.nextInt(10);

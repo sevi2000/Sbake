@@ -7,12 +7,14 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.Color;
 public class Field {
     static Random random = new Random();
     int width;
     int height;
     Map<FieldElement, Vector2> field;
     BodyPart lastAddedPart;
+    BodyPart head;
     long timeForNextMove;
     static final long TIME_FOR_NEXT_MOVE_MAX = 200;
     Field() {
@@ -26,9 +28,11 @@ public class Field {
         stg.addActor(donut);
     }
     public void initSnake(BodyPart bodyPart, Stage stg) {
+        bodyPart.color = Color.BLUE;
         field.put(bodyPart,new Vector2(3,3));
         stg.addActor(bodyPart);
         lastAddedPart =  bodyPart;
+        head = bodyPart;
         updateField();
     }
     public void addBodyPart(Stage stg, Batch batch) {
@@ -39,39 +43,63 @@ public class Field {
         lastAddedPart = newBodyPart;
         updateField();
     }
-    public void updateField(){
+    public void updateHead(){
+        if (head == null)
+            return;
         timeForNextMove += Gdx.graphics.getDeltaTime() * 1000;
         if (timeForNextMove > TIME_FOR_NEXT_MOVE_MAX) {
             timeForNextMove -= TIME_FOR_NEXT_MOVE_MAX;
-        for (FieldElement elt:field.keySet()) {
-            if (elt instanceof BodyPart elt1) {
-                switch (elt1.direction) {
+                switch (head.direction) {
                     case UP:
-                        if (field.get(elt1).y != 9)
-                            elt1.setY(field.get(elt1).y++);
-                        elt1.direction = Direction.UP;
+                        if (field.get(head).y != 9)
+                            head.setY(field.get(head).y++);
                         break;
                     case DOWN:
-                        if (field.get(elt1).y != 0)
-                            elt1.setY(field.get(elt1).y--);
-                        elt1.direction = Direction.DOWN;
+                        if (field.get(head).y != 0)
+                            head.setY(field.get(head).y--);
                         break;
                     case LEFT:
-                        if (field.get(elt1).x != 0)
-                            elt1.setY(field.get(elt1).x--);
-                        elt1.direction = Direction.LEFT;
+                        if (field.get(head).x != 0)
+                            head.setY(field.get(head).x--);
                         break;
                     case RIGHT:
-                        if (field.get(elt1).x != 9)
-                            elt1.setY(field.get(elt1).x++);
-                        elt1.direction = Direction.RIGHT;
+                        if (field.get(head).x != 9)
+                            head.setY(field.get(head).x++);
                         break;
                 }
             }
 
+            head.setX(field.get(head).x * 50);
+            head.setY(field.get(head).y * 50);
+        }
+        public void updateField() {
+        System.out.println(field);
+        updateHead();
+        for (FieldElement elt : field.keySet()) {
+            if(elt instanceof BodyPart bp && elt != head)
+            {
+                lastAddedPart.direction = head.direction;
+                switch (lastAddedPart.direction){
+                    case UP:
+                    field.get(elt).x = field.get(head).x;
+                    field.get(elt).y = field.get(head).y-1;
+                    break;
+                    case DOWN:
+                        field.get(elt).x = field.get(head).x;
+                        field.get(elt).y = field.get(head).y+1;
+                        break;
+                    case LEFT:
+                        field.get(elt).x = field.get(head).x+1;
+                        field.get(elt).y = field.get(head).y;
+                        break;
+                    case RIGHT:
+                        field.get(elt).x = field.get(head).x-1;
+                        field.get(elt).y = field.get(head).y;
+                        break;
+                }
+            }
             elt.setX(field.get(elt).x * 50);
             elt.setY(field.get(elt).y * 50);
-        }
         }
     }
 }
