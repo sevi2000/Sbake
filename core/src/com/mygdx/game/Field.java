@@ -21,11 +21,11 @@ public class Field {
     static final long TIME_FOR_NEXT_MOVE_MAX = 200;
     Field() {
         field = new HashMap<>();
-        this.width = 10;
-        this.height = 10;
+        this.width = 20;
+        this.height = 20;
     }
     public void addDonutAtRandomLocation(Donut donut,Stage stg){
-        field.put(donut,new Vector2(random.nextInt(10),random.nextInt(10)));
+        field.put(donut,new Vector2(random.nextInt(width),random.nextInt(height)));
         updateField(false);
         stg.addActor(donut);
     }
@@ -53,7 +53,7 @@ public class Field {
             Vector2 pos = positions.get(0);
                 switch (head.direction) {
                     case UP:
-                        if (pos.y != 9)
+                        if (pos.y != height - 1)
                             positions.add(0,new Vector2(pos.x,pos.y + 1));
                         break;
                     case DOWN:
@@ -65,7 +65,7 @@ public class Field {
                             positions.add(0,new Vector2(pos.x - 1,pos.y));
                         break;
                     case RIGHT:
-                        if (pos.x != 9)
+                        if (pos.x != width - 1)
                             positions.add(0,new Vector2(pos.x + 1,pos.y));
                         break;
                 }
@@ -83,13 +83,13 @@ public class Field {
             return;
         int i = 0;
         for (FieldElement elt : body) {
-            elt.setX(positions.get(i).x * 50);
-            elt.setY(positions.get(i).y * 50);
+            elt.setX(positions.get(i).x * 25);
+            elt.setY(positions.get(i).y * 25);
             i++;
         }
         for (FieldElement elt:field.keySet()){
-            elt.setX(field.get(elt).x * 50);
-            elt.setY(field.get(elt).y * 50);
+            elt.setX(field.get(elt).x * 25);
+            elt.setY(field.get(elt).y * 25);
         }
     }
     public static boolean donutUnderSnake(int x, int y){
@@ -97,6 +97,9 @@ public class Field {
             if (x == vec.x && y == vec.y)
                 return true;
         }
+
+
+
         return false;
     }
     public static boolean headTouchesBody(){

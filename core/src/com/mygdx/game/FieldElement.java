@@ -14,7 +14,7 @@ public abstract class FieldElement extends Actor {
     FieldElement(Batch batch) {
         super();
         this.shDr = createShapeDrawer(batch);
-        this.setSize(50,50);
+        this.setSize(25,25);
     }
     public static ShapeDrawer createShapeDrawer(Batch batch) {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
