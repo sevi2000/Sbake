@@ -13,6 +13,8 @@ public class Field {
     int width;
     int height;
     Map<FieldElement, Vector2> field;
+    List<BodyPart> body = new ArrayList<>();
+    static List<Vector2> positions = new ArrayList<>();
     BodyPart lastAddedPart;
     BodyPart head;
     long timeForNextMove;
@@ -24,82 +26,84 @@ public class Field {
     }
     public void addDonutAtRandomLocation(Donut donut,Stage stg){
         field.put(donut,new Vector2(random.nextInt(10),random.nextInt(10)));
-        updateField();
+        updateField(false);
         stg.addActor(donut);
     }
     public void initSnake(BodyPart bodyPart, Stage stg) {
         bodyPart.color = Color.BLUE;
-        field.put(bodyPart,new Vector2(3,3));
+        body.add(bodyPart);
+        positions.add(new Vector2(3,3));
         stg.addActor(bodyPart);
-        lastAddedPart =  bodyPart;
+        updateField(false);
         head = bodyPart;
-        updateField();
     }
     public void addBodyPart(Stage stg, Batch batch) {
         BodyPart newBodyPart =  new BodyPart(batch);
-        newBodyPart.direction = lastAddedPart.direction;
-        field.put(newBodyPart,new Vector2(field.get(lastAddedPart).x-1,field.get(lastAddedPart).y));
+        newBodyPart.direction = body.get(body.size()-1).direction;
+        body.add(newBodyPart);
         stg.addActor(newBodyPart);
-        lastAddedPart = newBodyPart;
-        updateField();
+        updateField(true);
     }
-    public void updateHead(){
+    public void updateHead(boolean newElt){
         if (head == null)
             return;
         timeForNextMove += Gdx.graphics.getDeltaTime() * 1000;
-        if (timeForNextMove > TIME_FOR_NEXT_MOVE_MAX) {
+        if (timeForNextMove > TIME_FOR_NEXT_MOVE_MAX || newElt) {
             timeForNextMove -= TIME_FOR_NEXT_MOVE_MAX;
+            Vector2 pos = positions.get(0);
                 switch (head.direction) {
                     case UP:
-                        if (field.get(head).y != 9)
-                            head.setY(field.get(head).y++);
+                        if (pos.y != 9)
+                            positions.add(0,new Vector2(pos.x,pos.y + 1));
                         break;
                     case DOWN:
-                        if (field.get(head).y != 0)
-                            head.setY(field.get(head).y--);
+                        if (pos.y != 0)
+                            positions.add(0,new Vector2(pos.x,pos.y - 1));
                         break;
                     case LEFT:
-                        if (field.get(head).x != 0)
-                            head.setY(field.get(head).x--);
+                        if (pos.x != 0)
+                            positions.add(0,new Vector2(pos.x - 1,pos.y));
                         break;
                     case RIGHT:
-                        if (field.get(head).x != 9)
-                            head.setY(field.get(head).x++);
+                        if (pos.x != 9)
+                            positions.add(0,new Vector2(pos.x + 1,pos.y));
                         break;
                 }
+                System.out.println("udateHead:\n"+positions);
+                if (!newElt)
+                    positions.remove(positions.get(positions.size() - 1));
             }
-
-            head.setX(field.get(head).x * 50);
-            head.setY(field.get(head).y * 50);
+        if (positions.size() < body.size()){
+            SbakeGame.gameOver = true;
         }
-        public void updateField() {
-        System.out.println(field);
-        updateHead();
-        for (FieldElement elt : field.keySet()) {
-            if(elt instanceof BodyPart bp && elt != head)
-            {
-                lastAddedPart.direction = head.direction;
-                switch (lastAddedPart.direction){
-                    case UP:
-                    field.get(elt).x = field.get(head).x;
-                    field.get(elt).y = field.get(head).y-1;
-                    break;
-                    case DOWN:
-                        field.get(elt).x = field.get(head).x;
-                        field.get(elt).y = field.get(head).y+1;
-                        break;
-                    case LEFT:
-                        field.get(elt).x = field.get(head).x+1;
-                        field.get(elt).y = field.get(head).y;
-                        break;
-                    case RIGHT:
-                        field.get(elt).x = field.get(head).x-1;
-                        field.get(elt).y = field.get(head).y;
-                        break;
-                }
-            }
+        }
+        public void updateField(boolean newElt) {
+        updateHead(newElt);
+        if(SbakeGame.gameOver)
+            return;
+        int i = 0;
+        for (FieldElement elt : body) {
+            elt.setX(positions.get(i).x * 50);
+            elt.setY(positions.get(i).y * 50);
+            i++;
+        }
+        for (FieldElement elt:field.keySet()){
             elt.setX(field.get(elt).x * 50);
             elt.setY(field.get(elt).y * 50);
         }
+    }
+    public static boolean donutUnderSnake(int x, int y){
+        for (Vector2 vec : positions){
+            if (x == vec.x && y == vec.y)
+                return true;
+        }
+        return false;
+    }
+    public static boolean headTouchesBody(){
+        for (int i = 1; i < positions.size(); i++){
+            if (positions.get(0).x == positions.get(i).x && positions.get(0).y == positions.get(i).y)
+                return true;
+        }
+        return false;
     }
 }
