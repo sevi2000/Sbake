@@ -83,8 +83,8 @@ public class Field {
             return;
         int i = 0;
         for (FieldElement elt : body) {
-            elt.setX(positions.get(i).x * 25);
-            elt.setY(positions.get(i).y * 25);
+            elt.setX(positions.get(i).x * 27);
+            elt.setY(positions.get(i).y * 27);
             i++;
         }
         for (FieldElement elt:field.keySet()){
