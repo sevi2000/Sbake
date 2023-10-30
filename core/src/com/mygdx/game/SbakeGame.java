@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FreeTypeFontGenerator;
 import java.util.*;
 public class SbakeGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -22,7 +25,9 @@ public class SbakeGame extends ApplicationAdapter {
 	Random random = new Random();
 	static boolean gameOver = false;
 	int score = 0;
-	//BitmapFont font = new BitmapFont();
+	FreeTypeFontGenerator generator;
+	FreeTypeFontParameter parameter;
+	BitmapFont font;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -35,12 +40,23 @@ public class SbakeGame extends ApplicationAdapter {
 		field.addDonutAtRandomLocation(donut,stg);
 		field.initSnake(head,stg);
 		//field.initSnake(bp,stg);
+
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+		parameter = new FreeTypeFontParameter();
+		parameter.size = 24; // Set the font size
+		parameter.color = Color.RED; // Set the font color
+		parameter.borderWidth = 2; // Set the border width
+		parameter.borderColor = Color.BLACK; // Set the border color
+		parameter.shadowOffsetX = 2; // Set the shadow X offset
+		parameter.shadowOffsetY = 2; // Set the shadow Y offset
+		parameter.shadowColor = Color.GRAY; // Set the shadow color
+		font = generator.generateFont(parameter);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear((float)0.9, (float)0.9, 0, 1);
-		//font.draw(batch, "Score : " + score, 10, 10);
+		font.draw(batch, "Hello, LibGDX!", 100, 100); // Draw text at (100, 100)
 		if (gameOver)
 			return;
 		if(head.direction != Direction.RIGHT && Gdx.input.isKeyPressed(Input.Keys.LEFT)){
@@ -78,6 +94,7 @@ public class SbakeGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
+		generator.dispose(); // Dispose of the generator when you're done
+
 	}
 }
