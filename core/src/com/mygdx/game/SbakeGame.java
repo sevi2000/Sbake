@@ -38,7 +38,7 @@ public class SbakeGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(0, 1, 1, 1);
+		ScreenUtils.clear((float)0.9, (float)0.9, 0, 1);
 		//font.draw(batch, "Score : " + score, 10, 10);
 		if (gameOver)
 			return;

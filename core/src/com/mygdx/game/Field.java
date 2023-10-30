@@ -88,8 +88,8 @@ public class Field {
             i++;
         }
         for (FieldElement elt:field.keySet()){
-            elt.setX(field.get(elt).x * 25);
-            elt.setY(field.get(elt).y * 25);
+            elt.setX(field.get(elt).x * 27);
+            elt.setY(field.get(elt).y * 27);
         }
     }
     public static boolean donutUnderSnake(int x, int y){
