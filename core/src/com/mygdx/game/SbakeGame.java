@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import java.util.*;
 public class SbakeGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -53,7 +54,9 @@ public class SbakeGame extends ApplicationAdapter {
 		}/* else {
 			gameOver = true;
 		}*/
-		if (field.positions.get(0).x == field.field.get(donut).x && field.positions.get(0).y == field.field.get(donut).y){
+		Vector2 headPos = field.positions.get(0);
+		Vector2 donutPos = field.field.get(donut);
+		if (headPos.x == donutPos.x && headPos.y == donutPos.y){
 			System.out.println("TOUCHED DONUTTT!!!!!");
 			field.addBodyPart(stg,batch);
 			int x,y;
