@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Color;
+import  com.badlogic.gdx.audio.*;
 import java.util.*;
 public class SbakeGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -25,6 +26,7 @@ public class SbakeGame extends ApplicationAdapter {
 	static boolean gameOver = false;
 	int score = 0;
 	BitmapFont font;
+	Sound sound;
 
 	@Override
 	public void create () {
@@ -38,6 +40,7 @@ public class SbakeGame extends ApplicationAdapter {
 		field.addDonutAtRandomLocation(donut,stg);
 		field.initSnake(head,stg);
 		font = new BitmapFont();
+		sound = Gdx.audio.newSound(Gdx.files.internal("sounds/eat.mp3"));
 	}
 
 	@Override
@@ -62,6 +65,7 @@ public class SbakeGame extends ApplicationAdapter {
 		Vector2 headPos = field.positions.get(0);
 		Vector2 donutPos = field.field.get(donut);
 		if (headPos.x == donutPos.x && headPos.y == donutPos.y){
+			sound.play(1.0f);
 			System.out.println("Score : " + score);
 			score++;
 			field.addBodyPart(stg,batch);
