@@ -21,6 +21,9 @@ public class Field {
     BodyPart head;
     long timeForNextMove;
     static final long TIME_FOR_NEXT_MOVE_MAX = 200;
+    private Stage stg;
+    private Batch batch;
+    boolean shouldAddBodyPart;
     Field() {
         field = new HashMap<>();
         this.width = 20;
@@ -39,18 +42,29 @@ public class Field {
         updateField(false);
         head = bodyPart;
     }
-    public void addBodyPart(Stage stg, Batch batch) {
+    public  void addBodyPart(){
         BodyPart newBodyPart =  new BodyPart(batch);
         newBodyPart.direction = body.get(body.size()-1).direction;
         body.add(newBodyPart);
         stg.addActor(newBodyPart);
         updateField(true);
     }
+    public void needAddBodyPart(Stage stg, Batch batch) {
+        shouldAddBodyPart = true;
+        if (this.stg == null && this.batch == null){
+            this.stg = stg;
+            this.batch = batch;
+        }
+    }
     public void updateHead(boolean newElt){
         if (head == null)
             return;
         timeForNextMove += Gdx.graphics.getDeltaTime() * 1000;
-        if (timeForNextMove > TIME_FOR_NEXT_MOVE_MAX || newElt) {
+        if (timeForNextMove > TIME_FOR_NEXT_MOVE_MAX) {
+            if (shouldAddBodyPart){
+                shouldAddBodyPart = !shouldAddBodyPart;
+                addBodyPart();
+            }
             timeForNextMove -= TIME_FOR_NEXT_MOVE_MAX;
             Vector2 pos = positions.get(0);
                 switch (head.direction) {

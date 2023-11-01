@@ -69,7 +69,7 @@ public class SbakeGame extends ApplicationAdapter {
 			sound.play(1.0f);
 			System.out.println("Score : " + score);
 			score+= donut.score();
-			field.addBodyPart(stg,batch);
+			field.needAddBodyPart(stg,batch);
 			int x,y;
 			do {
 				x = random.nextInt(10);
@@ -86,7 +86,7 @@ public class SbakeGame extends ApplicationAdapter {
 			sound.play(1.0f);
 			System.out.println("Score : " + score);
 			score+= special.score();
-			field.addBodyPart(stg,batch);
+			field.needAddBodyPart(stg,batch);
 			field.removeSpecial(stg);
 			field.updateField(false);
 		}
