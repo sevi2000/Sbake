@@ -27,6 +27,7 @@ public class SbakeGame extends ApplicationAdapter {
 	int score = 0;
 	BitmapFont font;
 	Sound sound;
+	Donut special;
 
 	@Override
 	public void create () {
@@ -34,7 +35,7 @@ public class SbakeGame extends ApplicationAdapter {
 		stg = new Stage(new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),new OrthographicCamera()),batch);
 		
 		field = new Field();
-		donut = new Donut(batch);
+		donut = new Donut(batch,false);
 		head = new BodyPart(batch);
 		BodyPart bp = new BodyPart(batch);
 		field.addDonutAtRandomLocation(donut,stg);
@@ -67,7 +68,7 @@ public class SbakeGame extends ApplicationAdapter {
 		if (headPos.x == donutPos.x && headPos.y == donutPos.y){
 			sound.play(1.0f);
 			System.out.println("Score : " + score);
-			score++;
+			score+= donut.score();
 			field.addBodyPart(stg,batch);
 			int x,y;
 			do {
@@ -76,6 +77,18 @@ public class SbakeGame extends ApplicationAdapter {
 			} while(Field.donutUnderSnake(x,y));
 			field.field.get(donut).x = x;
 			field.field.get(donut).y = y;
+		}
+		if (score % 5 == 0 && score != 0 && field.specialLocation() == null) {
+			special = new Donut(batch,true);
+			field.addDonutAtRandomLocation(special,stg);
+		}
+		if (field.specialLocation() != null && headPos.x == field.specialLocation().x && headPos.y == field.specialLocation().y){
+			sound.play(1.0f);
+			System.out.println("Score : " + score);
+			score+= special.score();
+			field.addBodyPart(stg,batch);
+			field.removeSpecial(stg);
+			field.updateField(false);
 		}
 		field.updateField(false);
 		stg.act();

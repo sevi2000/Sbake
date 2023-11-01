@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
 public class Field {
     static Random random = new Random();
     int width;
@@ -96,9 +98,6 @@ public class Field {
             if (x == vec.x && y == vec.y)
                 return true;
         }
-
-
-
         return false;
     }
     public static boolean headTouchesBody(){
@@ -107,5 +106,24 @@ public class Field {
                 return true;
         }
         return false;
+    }
+    public Vector2 specialLocation(){
+        for (FieldElement d:field.keySet()){
+            if (((Donut)d).special){
+                return field.get(d);
+            }
+        }
+        return null;
+    }
+
+    public void removeSpecial(Stage stg){
+        for (FieldElement d:field.keySet()){
+            if (((Donut)d).special)
+                field.remove(d);
+        }
+        for(Actor act:stg.getActors()) {
+            if (act instanceof Donut && ((Donut)act).special)
+                act.remove();
+        }
     }
 }
