@@ -74,7 +74,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        launcher-extension: [ deb, rpm, exe, msi, dmg, pkg ]
+        launcher-extension: [ deb, rpm ] # , exe, msi, dmg, pkg
         include:
           - launcher-extension: deb
             os: ubuntu-latest
