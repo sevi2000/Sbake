@@ -3,10 +3,15 @@ package com.mygdx.game;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.mygdx.game.SbakeGame;
+import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main (String[] args) {
 		if (args.length > 0 && args[0].replace("-", "").equalsIgnoreCase("version")) {
 			try {
 				InputStream is = DesktopLauncher.class.getClassLoader().getResourceAsStream("version.md");
