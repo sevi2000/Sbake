@@ -69,7 +69,6 @@ public class Field {
                             positions.add(0,new Vector2(pos.x + 1,pos.y));
                         break;
                 }
-                System.out.println("udateHead:\n"+positions);
                 if (!newElt)
                     positions.remove(positions.get(positions.size() - 1));
             }
