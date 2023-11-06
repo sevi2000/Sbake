@@ -58,11 +58,11 @@ jobs:
         asset_name: ${{ env.ARTIFACT_NAME}}.jar
         asset_content_type: application/jar
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.2.4
+      uses: HydrolienF/LauncherJar@0.3.6
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
         user-name: ${{ env.USER_NAME }}
-        launcher-jar-version: 0.2.4
+        launcher-jar-version: 0.3.6
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ steps.create_release.outputs.upload_url }}
         app-version: ${{ steps.version.outputs.content }}
@@ -74,20 +74,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        launcher-extension: [ deb, rpm ] # , exe, msi, dmg, pkg
+        launcher-extension: [ deb, rpm, exe, msi, dmg, pkg ]
         include:
           - launcher-extension: deb
             os: ubuntu-latest
           - launcher-extension: rpm
             os: ubuntu-latest
-          # - launcher-extension: exe
-          #   os: windows-latest
-          # - launcher-extension: msi
-          #   os: windows-latest
-          # - launcher-extension: dmg
-          #   os: macos-latest
-          # - launcher-extension: pkg
-          #   os: macos-latest
+          - launcher-extension: exe
+            os: windows-latest
+          - launcher-extension: msi
+            os: windows-latest
+          - launcher-extension: dmg
+            os: macos-latest
+          - launcher-extension: pkg
+            os: macos-latest
     if: github.event.pull_request.merged == true
     needs: releaseJob
     runs-on: ${{ matrix.os }}
@@ -95,11 +95,11 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: LauncherJar
-      uses: HydrolienF/LauncherJar@0.2.4
+      uses: HydrolienF/LauncherJar@0.3.6
       with:
         project-name: ${{ env.ARTIFACT_NAME }}
         user-name: ${{ env.USER_NAME }}
-        launcher-jar-version: 0.2.4
+        launcher-jar-version: 0.3.6
         GITHUB_TOKEN: ${{ github.token }}
         release-url: ${{ needs.releaseJob.outputs.upload_url }}
         app-version: ${{ needs.releaseJob.outputs.version }}
